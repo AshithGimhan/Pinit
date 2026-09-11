@@ -1,3 +1,5 @@
+import issues from "../data/Issues";
+
 export function displayDate(issueDate) {
     const date = new Date(issueDate)
     const now = new Date();
@@ -27,4 +29,44 @@ export function displayStatusColor(status) {
     }
 
 
+}
+
+export function getCountByStatus() {
+    return {
+        open: issues.filter(i => i.status === 'open').length,
+        active: issues.filter(i => i.status === 'active').length,
+        resolved: issues.filter(i => i.status === 'resolved').length,
+        total: issues.length
+    }
+}
+
+export function avgFixTime() {
+    let fixTimes = []
+
+    issues.forEach(issue => {
+        if (issue.status === 'resolved') {
+            const fixTime =
+                (new Date(issue.resolvedDate) - new Date(issue.date)) /
+                (1000 * 60 * 60 * 24)
+
+            fixTimes.push(fixTime)
+        }
+    })
+
+    const average = fixTimes.reduce((sum, time) => sum + time, 0) / fixTimes.length
+
+    return average
+
+}
+
+
+export function getCountByCategory() {
+    return {
+        potholes: issues.filter(i => i.category === 'Potholes').length,
+        streetlight: issues.filter(i => i.category === 'Streetlight').length,
+        waste: issues.filter(i => i.category === 'Waste').length,
+        signage: issues.filter(i => i.category === 'Signage').length,
+        other: issues.filter(i => i.category === 'Other').length,
+        total: issues.length
+    }
 }

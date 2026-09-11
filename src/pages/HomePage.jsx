@@ -1,6 +1,12 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { Search } from 'lucide-react';
-import { displayDate, displayStatusColor } from '../utils/helpers';
+import {
+  avgFixTime,
+  displayDate,
+  displayStatusColor,
+  getCountByCategory,
+  getCountByStatus,
+} from '../utils/helpers';
 import issues from '../data/Issues';
 
 export function HomePage() {
@@ -15,19 +21,27 @@ export function HomePage() {
         </div>
         <div className="flex gap-1 text-center justify-center mt-6 mx-4 text-xs">
           <div className="border border-red-800 p-2 flex-1">
-            <span className=" text-red-800 font-bold">18</span>
+            <span className=" text-red-800 font-bold">
+              {getCountByStatus().open}
+            </span>
             <p>Open</p>
           </div>
           <div className="border border-red-800 p-2 flex-1">
-            <span className=" text-orange-800 font-bold">11</span>
+            <span className=" text-orange-800 font-bold">
+              {getCountByStatus().active}
+            </span>
             <p>Active</p>
           </div>
           <div className="border border-red-800 p-2 flex-1">
-            <span className=" text-green-800 font-bold">13</span>
+            <span className=" text-green-800 font-bold">
+              {getCountByStatus().resolved}
+            </span>
             <p>Resolved</p>
           </div>
           <div className="border border-red-800 p-2 flex-1">
-            <span className=" text-gray-800 font-bold">6.2d</span>
+            <span className=" text-gray-800 font-bold">
+              {avgFixTime().toFixed(1)}
+            </span>
             <p>Avg fix</p>
           </div>
         </div>
@@ -66,46 +80,71 @@ export function HomePage() {
           <div className="text-sm">
             <div className="flex justify-between mx-3">
               <h3>Potholes</h3>
-              <span className="">15</span>
+              <span>{getCountByCategory().potholes}</span>
             </div>
             <div className="w-11/12 h-2 bg-gray-200 overflow-hidden rounded-4xl mt-2 mx-auto">
-              <div className="w-10/12 bg-red-800 h-full rounded-full"></div>
+              <div
+                className=" bg-red-800 h-full rounded-full"
+                style={{
+                  width: `${(getCountByCategory().potholes / issues.length) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
           <div className="text-sm">
             <div className="flex justify-between mx-3">
-              <h3>Streetlights</h3>
-              <span className="">11</span>
+              <h3>Streetlight</h3>
+              <span>{getCountByCategory().streetlight}</span>
             </div>
             <div className="w-11/12 h-2 bg-gray-200 overflow-hidden rounded-4xl mt-2 mx-auto">
-              <div className="w-8/12 bg-orange-500 h-full rounded-full"></div>
+              <div
+                className=" bg-orange-500 h-full rounded-full"
+                style={{
+                  width: `${(getCountByCategory().streetlight / issues.length) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
           <div className="text-sm">
             <div className="flex justify-between mx-3">
-              <h3>Waste/ litter</h3>
-              <span className="">9</span>
+              <h3>Waste/litter</h3>
+              <span>{getCountByCategory().waste}</span>
             </div>
             <div className="w-11/12 h-2 bg-gray-200 overflow-hidden rounded-4xl mt-2 mx-auto">
-              <div className="w-6/12 bg-green-500 h-full rounded-full"></div>
+              <div
+                className=" bg-green-500 h-full rounded-full"
+                style={{
+                  width: `${(getCountByCategory().waste / issues.length) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
           <div className="text-sm">
             <div className="flex justify-between mx-3">
               <h3>Signage</h3>
-              <span className="">4</span>
+              <span>{getCountByCategory().signage}</span>
             </div>
             <div className="w-11/12 h-2 bg-gray-200 overflow-hidden rounded-4xl mt-2 mx-auto">
-              <div className="w-3/12 bg-blue-500 h-full rounded-full"></div>
+              <div
+                className=" bg-blue-500 h-full rounded-full"
+                style={{
+                  width: `${(getCountByCategory().signage / issues.length) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
           <div className="text-sm">
             <div className="flex justify-between mx-3">
               <h3>Other</h3>
-              <span className="">3</span>
+              <span>{getCountByCategory().other}</span>
             </div>
             <div className="w-11/12 h-2 bg-gray-200 overflow-hidden rounded-4xl mt-2 mx-auto">
-              <div className="w-2/12 bg-gray-500 h-full rounded-full"></div>
+              <div
+                className=" bg-gray-500 h-full rounded-full"
+                style={{
+                  width: `${(getCountByCategory().other / issues.length) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
         </div>
