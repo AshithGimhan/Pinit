@@ -1,5 +1,7 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { Search } from 'lucide-react';
+import { displayDate, displayStatusColor } from '../utils/helpers';
+import issues from '../data/Issues';
 
 export function HomePage() {
   return (
@@ -8,7 +10,7 @@ export function HomePage() {
         <div className="flex flex-col pl-3">
           <h2 className="text-red-800 font-medium">Example District</h2>
           <p className="text-xs text-gray-500">
-            42 issues this month - updated just now
+            {issues.length} issues this month - updated just now
           </p>
         </div>
         <div className="flex gap-1 text-center justify-center mt-6 mx-4 text-xs">
@@ -34,7 +36,7 @@ export function HomePage() {
         <MapContainer
           center={[6.9271, 79.8912]}
           zoom={13}
-          className="h-[200px] w-11/12"
+          className="h-50 w-11/12"
         >
           <TileLayer
             attribution="© OpenStreetMap © CARTO"
@@ -150,77 +152,39 @@ export function HomePage() {
       <div className="space-y-3 mt-3">
         <div className="flex justify-between p-3">
           <h2 className="uppercase text-xs text-red-800">Recent reports</h2>
-          <span className="text-xs">42 total</span>
+          <span className="text-xs">{issues.length} total</span>
         </div>
-        <div className="flex items-center justify-between mx-2 border-b p-2 m-2 border-gray-300 ">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold">
-              Deep pothole on Example Ave
-            </h3>
-            <div className="flex text-xs gap-3 text-gray-600">
-              <p>Potholes</p>
-              <p>Near 3rd st</p>
-              <p>2 days ago</p>
+        {issues.map((issue) => {
+          return (
+            <div
+              key={issue.id}
+              className="flex items-center justify-between mx-2 border-b p-2 m-2 border-gray-300 "
+            >
+              <div className="flex flex-col gap-2">
+                <h3 className="text-sm font-semibold">{issue.title}</h3>
+                <div className="flex text-[11px] gap-2 text-gray-600">
+                  <p>{issue.category}</p>
+                  <p>{issue.location.split(',')[0]}</p>
+                  <p>{displayDate(issue.date)}</p>
+                </div>
+                <span className="text-[11px] text-gray-600">
+                  {issue.upvotes} saw this
+                </span>
+              </div>
+              <span
+                className={`text-xs font-bold border border-none py-1 px-3 rounded-md
+                  ${displayStatusColor(issue.status)}`}
+              >
+                {issue.status}
+              </span>
             </div>
-            <span className="text-xs text-gray-600">14 saw this</span>
-          </div>
-          <span className="text-sm text-red-800 font-bold border bg-red-200 border-none py-1 px-3 rounded-md">
-            Open
-          </span>
-        </div>
-        <div className="flex items-center justify-between mx-2 border-b p-2 m-2 border-gray-300">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold">
-              Deep pothole on Example Ave
-            </h3>
-            <div className="flex text-xs gap-3 text-gray-600">
-              <p>Potholes</p>
-              <p>Near 3rd st</p>
-              <p>2 days ago</p>
-            </div>
-            <span className="text-xs text-gray-600">14 saw this</span>
-          </div>
-          <span className="text-sm text-orange-800 font-bold border bg-orange-200 border-none py-1 px-3 rounded-md">
-            Active
-          </span>
-        </div>
-        <div className="flex items-center justify-between mx-2 border-b p-2 m-2 border-gray-300">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold">
-              Deep pothole on Example Ave
-            </h3>
-            <div className="flex text-xs gap-3 text-gray-600">
-              <p>Potholes</p>
-              <p>Near 3rd st</p>
-              <p>2 days ago</p>
-            </div>
-            <span className="text-xs text-gray-600">14 saw this</span>
-          </div>
-          <span className="text-sm text-green-800 font-bold border bg-green-200 border-none py-1 px-3 rounded-md">
-            Resolved
-          </span>
-        </div>
-        <div className="flex items-center justify-between mx-2 border-b p-2 m-2 border-gray-300">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold">
-              Deep pothole on Example Ave
-            </h3>
-            <div className="flex text-xs gap-3 text-gray-600">
-              <p>Potholes</p>
-              <p>Near 3rd st</p>
-              <p>2 days ago</p>
-            </div>
-            <span className="text-xs text-gray-600">14 saw this</span>
-          </div>
-          <span className="text-sm text-red-800 font-bold border bg-red-200 border-none py-1 px-3 rounded-md">
-            Open
-          </span>
-        </div>
+          );
+        })}
       </div>
       <div className="mt-8 px-3 pb-2">
         <div className="flex justify-end">
           <button className="rounded bg-black px-3 py-2 text-xs font-medium text-white hover:bg-gray-800">
-            View Full Report
+            View All
           </button>
         </div>
       </div>
