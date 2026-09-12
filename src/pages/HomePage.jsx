@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
-import { Search } from 'lucide-react';
+
+import { Search, SquareArrowLeft, SquareArrowRight } from 'lucide-react';
 import {
   avgFixTime,
   displayDate,
@@ -8,8 +8,28 @@ import {
   getCountByStatus,
 } from '../utils/helpers';
 import issues from '../data/Issues';
+import UseIssues from '../hooks/useIssues';
+import { IssueMap } from '../components/IssueMap';
 
 export function HomePage() {
+  const {
+    allfilteredIssues,
+    paginatedIssues,
+    filter,
+    setFilter,
+    search,
+    setSearch,
+    type,
+    setType,
+    sort,
+    setSort,
+    page,
+    setPage,
+    totalPages,
+    resetPage,
+  } = UseIssues();
+
+
   return (
     <>
       <div className="border-b border-gray-300 pb-5">
@@ -46,18 +66,7 @@ export function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center mt-3">
-        <MapContainer
-          center={[6.9271, 79.8912]}
-          zoom={13}
-          className="h-50 w-11/12"
-        >
-          <TileLayer
-            attribution="© OpenStreetMap © CARTO"
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=cb1_31sx_1_843714cdfe87fab2ae5c9aa4"
-          />
-        </MapContainer>
-      </div>
+     <IssueMap issues={allfilteredIssues}/>
       <div className="flex gap-5 text-xs mt-3 pl-3">
         <div className="flex gap-2 items-center">
           <span className="inline-block w-2 h-2 bg-red-800 rounded-full"></span>
@@ -151,40 +160,81 @@ export function HomePage() {
       </div>
       <div className="mt-4 space-y-4 p-3">
         <div className="flex justify-between mx-3 text-sm gap-3">
-          <button className="border border-gray-300 flex-1 py-1 px-2">
+          <button
+            onClick={() => {
+              setFilter('all');
+              resetPage();
+            }}
+            className="border border-gray-300 flex-1 py-1 px-2"
+          >
             All
           </button>
-          <button className="border border-gray-300 flex-1 py-1 px-2">
+          <button
+            onClick={() => {
+              setFilter('open');
+              resetPage();
+            }}
+            className="border border-gray-300 flex-1 py-1 px-2"
+          >
             Open
           </button>
-          <button className="border border-gray-300 flex-1 py-1 px-2">
+          <button
+            onClick={() => {
+              setFilter('active');
+              resetPage();
+            }}
+            className="border border-gray-300 flex-1 py-1 px-2"
+          >
             Active
           </button>
-          <button className="border border-gray-300 flex-1 py-1 px-2">
+          <button
+            onClick={() => {
+              setFilter('resolved');
+              resetPage();
+            }}
+            className="border border-gray-300 flex-1 py-1 px-2"
+          >
             Resolved
           </button>
         </div>
         <div className="flex justify-center text-sm items-center gap-2">
           <input
             type="text"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              resetPage();
+            }}
             placeholder="Search issues or locations..."
             className="border border-gray-300 px-2 py-1 w-8/12"
           />
           <Search />
         </div>
         <div className="flex justify-between text-sm mx-4">
-          <select name="" id="">
-            <option value="">All types</option>
-            <option value="">Potholes</option>
-            <option value="">Streetlights</option>
-            <option value="">Waste</option>
-            <option value="">Signage</option>
+          <select
+            value={type}
+            onChange={(e) => {
+              setType(e.target.value);
+              resetPage();
+            }}
+          >
+            <option value={'all'}>All types</option>
+            <option value={'potholes'}>Potholes</option>
+            <option value={'streetlight'}>Streetlights</option>
+            <option value={'waste'}>Waste</option>
+            <option value={'signage'}>Signage</option>
           </select>
 
-          <select name="" id="">
-            <option value="">Newest first</option>
-            <option value="">Oldest first</option>
-            <option value="">Most upvoted</option>
+          <select
+            value={sort}
+            onChange={(e) => {
+              setSort(e.target.value);
+              resetPage();
+            }}
+          >
+            <option value="newest-first">Newest first</option>
+            <option value="oldest-first">Oldest first</option>
+            <option value="most-upvoted">Most upvoted</option>
           </select>
         </div>
       </div>
@@ -193,7 +243,7 @@ export function HomePage() {
           <h2 className="uppercase text-xs text-red-800">Recent reports</h2>
           <span className="text-xs">{issues.length} total</span>
         </div>
-        {issues.map((issue) => {
+        {paginatedIssues.map((issue) => {
           return (
             <div
               key={issue.id}
@@ -219,6 +269,28 @@ export function HomePage() {
             </div>
           );
         })}
+
+        {totalPages > 1 && (
+          <div className="flex gap-2 justify-center items-center pt-2 mx-2 text-sm">
+            <button
+              className="disabled:opacity-40 border py-1 px-2 border-gray-400"
+              disabled={page === 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              Prev
+            </button>
+            <span className=" text-gray-500 ">
+              {page} of {totalPages}
+            </span>
+            <button
+              className="disabled:opacity-40 border py-1 px-2  border-gray-400"
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
       <div className="mt-8 px-3 pb-2">
         <div className="flex justify-end">
