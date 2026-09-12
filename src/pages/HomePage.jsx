@@ -1,4 +1,3 @@
-
 import { Search, SquareArrowLeft, SquareArrowRight } from 'lucide-react';
 import {
   avgFixTime,
@@ -28,7 +27,6 @@ export function HomePage() {
     totalPages,
     resetPage,
   } = UseIssues();
-
 
   return (
     <>
@@ -66,7 +64,7 @@ export function HomePage() {
           </div>
         </div>
       </div>
-     <IssueMap issues={allfilteredIssues}/>
+      <IssueMap issues={allfilteredIssues} />
       <div className="flex gap-5 text-xs mt-3 pl-3">
         <div className="flex gap-2 items-center">
           <span className="inline-block w-2 h-2 bg-red-800 rounded-full"></span>
@@ -292,12 +290,10 @@ export function HomePage() {
           </div>
         )}
       </div>
-      <div className="mt-8 px-3 pb-2">
-        <div className="flex justify-end">
-          <button className="rounded bg-black px-3 py-2 text-xs font-medium text-white hover:bg-gray-800">
-            View All
-          </button>
-        </div>
+      <div className="mt-8 px-3 pb-2 justify-end flex">
+        <button className="bg-black text-white p-2 text-xs hover:bg-red-80 cursor-pointer">
+          + Report Issue
+        </button>
       </div>
     </>
   );

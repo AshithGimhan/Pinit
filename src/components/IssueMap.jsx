@@ -14,7 +14,7 @@ export function IssueMap({ issues }) {
 
   return (
     <div className="flex justify-center mt-3">
-      <MapContainer center={position} zoom={13} className="h-50 w-11/12">
+      <MapContainer center={position} zoom={13} className="z-0 h-50 w-11/12">
         <TileLayer
           attribution="© OpenStreetMap © CARTO"
           url="https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=cb1_31sx_1_843714cdfe87fab2ae5c9aa4"
