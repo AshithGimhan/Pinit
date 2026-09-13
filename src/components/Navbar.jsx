@@ -1,10 +1,17 @@
 import { Pin, Menu } from 'lucide-react';
 import { Hamburger } from './Hamburger';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-function Header() {
+function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [currentLink, setCurrentLink] = useState('dashboard');
+  const location = useLocation();
+
+  useEffect(() => {
+    setCurrentLink(location.pathname)
+  }, [location.pathname])
+
 
   return (
     <div className="flex justify-between items-center my-4 mr-3 ml-1 border-b-2 pb-3">
@@ -32,6 +39,7 @@ function Header() {
             onClose={() => setMenuOpen(false)}
             currentLink={currentLink}
             setCurrentLink={setCurrentLink}
+            setMenuOpen={setMenuOpen}
           />
         </>
       )}
@@ -39,4 +47,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Navbar;

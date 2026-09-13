@@ -9,12 +9,12 @@ import {
 import issues from '../data/Issues';
 import UseIssues from '../hooks/useIssues';
 import { IssueMap } from '../components/IssueMap';
+import { Link } from 'react-router-dom';
 
 export function HomePage() {
   const {
     allfilteredIssues,
     paginatedIssues,
-    filter,
     setFilter,
     search,
     setSearch,
@@ -292,7 +292,7 @@ export function HomePage() {
       </div>
       <div className="mt-8 px-3 pb-2 justify-end flex">
         <button className="bg-black text-white p-2 text-xs hover:bg-red-80 cursor-pointer">
-          + Report Issue
+          <Link to="submit-report">+ Report Issue</Link>
         </button>
       </div>
     </>
